@@ -1,5 +1,109 @@
 //Create the Player class
 
+class Player extends Creature {
+  constructor(name, position, board, level = 1, items = [], gold = 0) {
+    super(name, 'player/front.png', level, items, gold);
+    this.attackSpeed = 2000 / level;
+    this.exp = 0;
+    this.position = position;
+    this.board = board;
+  }
+  render(root) {
+    this.root = root;
+    root.appendChild(this.element);
+    this.update();
+  }
+  update() {
+    this.element.style.position = 'absolute';
+    this.element.style.left = this.position.column * ENTITY_SIZE + 'px';
+    this.element.style.top = this.position.row * ENTITY_SIZE + 'px';
+    this.element.style.zIndex = '10';
+  }
+  move(direction) {
+    switch (direction) {
+      case 'left':
+        if (this.position.column > 1) {
+          this.position.column--;
+          this.setImg('player/left.png');
+        }
+        break;
+      case 'right':
+        if (this.position.column < board.rows[1].length - 2) {
+          this.position.column++;
+          this.setImg('player/right.png');
+        }
+        break;
+      case 'up':
+        if (this.position.row > 1) {
+          this.position.row--;
+          this.setImg('player/back.png');
+        }
+        break;
+      case 'down':
+        if (this.position.row < board.rows.length - 2) {
+          this.position.row++;
+          this.setImg('player/front.png');
+        }
+        break;
+    }
+    player.update();
+  }
+  pickup(entity) {
+    if (entity instanceof Items) {
+      player.items.push(entity);
+      playSound('loot');
+      clearEntity(player.position);
+    }
+    if (entity instanceof Gold) {
+      player.gold += entity.value;
+      playSound('gold');
+      clearEntity(player.position);
+    }
+  }
+  attack(entity) {
+    super.attack(entity);
+    playSound('pattack');
+  }
+  buy(item, tradesman) {
+    player.gold -= item.value;
+    player.items.push(item);
+    tradesman.items.splice(player.items.indexOf(item), 1);
+  }
+  sell(item, tradesman) {
+    player.gold += item.value;
+    tradesman.items.push(item);
+    player.items.splice(player.items.indexOf(item), 1);
+  }
+  useItem(item, target) {
+    item.use(target);
+    player.items.splice(player.items.indexOf(item), 1);
+  }
+  loot(entity) {
+    entity.items.forEach(function(item) {
+      player.items.push(item);
+    });
+    entity.items = [];
+    player.gold += entity.gold;
+    entity.gold = 0;
+    playSound('loot');
+  }
+  getExpToLevel() {
+    return this.level * 10;
+  }
+  getExp(entity) {
+    this.exp += entity.level * 10;
+    this.levelUp();
+  }
+  levelUp() {
+    if (this.exp >= this.getExpToLevel()) {
+      this.level++;
+      this.strength = this.level * 10;
+      this.attackSpeed = 3000 / this.level;
+      playSound('levelup');
+      this.levelUp();
+    }
+  }
+}
 /*
 Player class definition. Player is a Creature
 - constructor

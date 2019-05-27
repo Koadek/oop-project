@@ -12,6 +12,16 @@ Item class definition. Item is an Entity
 - sound (Audio object - type is used for the sound file path)
 Example use: not used by itself. 
 */
+class Items {
+  constructor(value, rarity, type) {
+    this.element = document.createElement('img');
+    this.element.src = 'imgs/items/' + type + '.png';
+    this.name = ITEM_RARITIES[rarity] + ' ' + type;
+    this.value = value;
+    this.rarity = rarity;
+    this.sound = new Audio('sounds/' + type + '.wav');
+  }
+}
 
 /*
 Potion class definition. Potion is an Item
@@ -26,6 +36,15 @@ Potion class definition. Potion is an Item
 Example use:
 new Potion(0) // potion rarity 0
 */
+class Potion extends Items {
+  constructor(rarity) {
+    super((rarity + 1) * 10, rarity, 'potion');
+  }
+  use(target) {
+    target.hp = Math.min(target.hp + this.value, target.getMaxHp());
+    // playSound(this.sound);
+  }
+}
 
 /*
 Bomb class definition. Bomb is an Item
@@ -40,6 +59,17 @@ Bomb class definition. Bomb is an Item
 Example use:
 new Bomb(0) // bomb rarity 0
 */
+class Bomb extends Items {
+  constructor(rarity) {
+    super((rarity + 1) * 20, rarity, 'bomb');
+    this.damage = (rarity + 1) * 30;
+    this.value = (rarity + 1) * 20;
+  }
+  use(target) {
+    target.hp = Math.max(target.hp - this.damage, 0);
+    // playSound(this.sound);
+  }
+}
 
 /*
 Key class definition. Key is an Item
@@ -52,3 +82,12 @@ Key class definition. Key is an Item
 Example use:
 new Key(0) // bomb rarity 0
 */
+class Key extends Items {
+  constructor() {
+    super(100, 3, 'key');
+  }
+  use(target) {
+    target.open();
+    // playSound(this.sound);
+  }
+}

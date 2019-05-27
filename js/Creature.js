@@ -24,6 +24,29 @@ The Creature class is an Entity. It has the following properties (not including 
   - sets an attack timeout that expires after attackSpeed. While the timeout is active, this method immediately returns false, else returns true.
 Example use: not used by itself. 
 */
+class Creature extends Entity {
+  constructor(name, img, level, items, gold) {
+    super(img);
+    this.name = name;
+    this.level = level;
+    this.items = items;
+    this.gold = gold;
+    this.hp = level * 100;
+    this.strength = level * 10;
+    this.attackSpeed = 3000 / level;
+  }
+  getMaxHp() {
+    return this.level * 100;
+  }
+  hit(val) {
+    this.hp = Math.max(this.hp - val, 0);
+  }
+  attack(entity) {
+    setTimeout(() => {
+      entity.hit(this.strength);
+    }, this.attackSpeed);
+  }
+}
 
 /*
 The Monster class is a Creature. It has the following properties (bot including inherited properties):
@@ -39,3 +62,18 @@ The Monster class is a Creature. It has the following properties (bot including 
 Example use:
 new Monster('Anti Fairy', 1, [], 0); // Creates a Monster named Anti Fairy, level 1, no items and 0 gold. Only the name is required.
 */
+class Monster extends Creature {
+  constructor(name, level = 1, items = [], gold = 0) {
+    super(
+      name,
+      'monsters/' + name.replace(/\s/g, '') + '.gif',
+      level,
+      items,
+      gold
+    );
+  }
+  attack(entity) {
+    super.attack(entity);
+    playSound('mattack');
+  }
+}
