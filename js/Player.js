@@ -18,7 +18,8 @@ Player class definition. Player is a Creature
 - update (function)
   - parameters: none
   - Updates the player's HTML element position based on its position property and ENTITY_SIZE
-- moveToPosition (Position)
+- moveToPosition (function)
+  - parameters: position (Position)
   - moves to position specified unless it is a Wall entity.
   - updates player (update method)
 - move (function)
@@ -29,7 +30,7 @@ Player class definition. Player is a Creature
   - Adds item or gold and plays the corresponding sound ('loot' or 'gold' respectively)
 - attack (function)
   - parameters: (entity)
-  - calls the attack method from Creature (use super) and plays the 'pattack' sound if the attack was successful
+  - calls the attack method from Creature (use super) and plays the 'pattack' sound
 - buy (function)
   - parameters: item (Item), tradesman (Tradesman)
   - updates gold and items for both player and tradesman.
