@@ -296,7 +296,7 @@ function createMonsterMenu(root, monster) {
   actions.textContent = 'Actions';
   let attackBtn = document.createElement('button');
   attackBtn.textContent = 'Attack';
-  if (player.items.length > 1) createItemActions(actions, monster);
+  if (player.items.length > 0) createItemActions(actions, monster);
   attackBtn.disabled = false;
   // Add code here to reset the player attack timeout to allow the player to attack a monster as soon as one is encountered
   attackBtn.addEventListener('click', () => {
