@@ -40,9 +40,7 @@ class Creature extends Entity {
     this.hp = Math.max(this.hp - val, 0);
   }
   attack(entity) {
-    setTimeout(() => {
-      entity.hit(this.strength);
-    }, this.attackSpeed);
+    entity.hit(this.strength);
   }
 }
 

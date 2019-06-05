@@ -49,7 +49,7 @@ class Player extends Creature {
     player.update();
   }
   pickup(entity) {
-    if (entity instanceof Items) {
+    if (entity instanceof Item) {
       player.items.push(entity);
       playSound('loot');
       clearEntity(player.position);

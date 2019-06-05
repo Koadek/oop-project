@@ -265,7 +265,7 @@ function createCreatureView(root, creature) {
 function createActionMenu(entity) {
   const actionMenu = document.createElement('div');
   actionMenu.id = 'action-menu';
-  if (entity instanceof Gold || entity instanceof Items)
+  if (entity instanceof Gold || entity instanceof Item)
     createPickupMenu(actionMenu, entity);
   if (entity instanceof Monster) createMonsterMenu(actionMenu, entity);
   if (entity instanceof Tradesman) createTradeMenu(actionMenu, entity);
@@ -386,11 +386,11 @@ function createTradeMenu(root, tradesman) {
 function createDungeonMenu(root, dungeon) {
   const actions = document.createElement('div');
   actions.textContent = 'Actions';
-  if ((dungeon.isOpen = false)) {
+  if (!dungeon.isOpen) {
     const openBtn = document.createElement('button');
     openBtn.textContent = 'Open';
-    player.items.filter(key => key instanceof Key);
-    if (key.length === 0) openBtn.disabled = true;
+    const key = player.items.find(item => item instanceof Key);
+    if (!key) openBtn.disabled = true;
     // Add code to get the key from the player items
     // If the player does not have a key, set the openBtn to disabled
     openBtn.addEventListener('click', () => {

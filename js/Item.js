@@ -12,7 +12,7 @@ Item class definition. Item is an Entity
 - sound (Audio object - type is used for the sound file path)
 Example use: not used by itself. 
 */
-class Items {
+class Item {
   constructor(value, rarity, type) {
     this.element = document.createElement('img');
     this.element.src = 'imgs/items/' + type + '.png';
@@ -36,13 +36,13 @@ Potion class definition. Potion is an Item
 Example use:
 new Potion(0) // potion rarity 0
 */
-class Potion extends Items {
+class Potion extends Item {
   constructor(rarity) {
     super((rarity + 1) * 10, rarity, 'potion');
   }
   use(target) {
     target.hp = Math.min(target.hp + this.value, target.getMaxHp());
-    // playSound(this.sound);
+    this.sound.play();
   }
 }
 
@@ -59,7 +59,7 @@ Bomb class definition. Bomb is an Item
 Example use:
 new Bomb(0) // bomb rarity 0
 */
-class Bomb extends Items {
+class Bomb extends Item {
   constructor(rarity) {
     super((rarity + 1) * 20, rarity, 'bomb');
     this.damage = (rarity + 1) * 30;
@@ -67,7 +67,7 @@ class Bomb extends Items {
   }
   use(target) {
     target.hp = Math.max(target.hp - this.damage, 0);
-    // playSound(this.sound);
+    this.sound.play();
   }
 }
 
@@ -82,12 +82,12 @@ Key class definition. Key is an Item
 Example use:
 new Key(0) // bomb rarity 0
 */
-class Key extends Items {
+class Key extends Item {
   constructor() {
     super(100, 3, 'key');
   }
   use(target) {
     target.open();
-    // playSound(this.sound);
+    this.sound.play();
   }
 }
