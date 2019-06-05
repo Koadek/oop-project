@@ -27,12 +27,10 @@ Board class definition
   - parameters: root (HTMLElement)
   - Sets the root property
   - Used to create the HTML elements for the board and append the elements to the root element.
-- update (function)
- - parameters: none
- - replaces the HTML element for each entity that has changed (e.g. Monster -> Grass)
 - setEntity (function)
   - parameters: entity (Entity), position (Position)
   - Sets the Entity object at the specified position and updates the Board (using the update method)
+  - Replaces the HTML img element for the specified position with the entity img element
 - getEntity (function)
   - parameters: position (Position)
   - returns the Entity at the specified position

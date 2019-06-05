@@ -188,6 +188,7 @@ function defeatMonster(monster) {
   player.getExp(monster);
   player.loot(monster);
   clearEntity(player.position);
+  updateActionCam();
 }
 
 // UPDATE this function to set the board entity at position to a grass entity
@@ -289,23 +290,20 @@ function createPickupMenu(root, entity) {
 
 // UPDATE this function to add a call to createItemActions(root, monster) if the player has items
 // Update the attackBtn event listener to attack the monster
-// Update the if condition to execute only if the monster hp is 0 or lower. When true, call defeatMonster.
+// Update the if condition to execute defeatMonster only if the monster hp is 0 or lower.
 // Replace the timeout value (1000) passed to disable the attackBtn to be the player's attack speed
 function createMonsterMenu(root, monster) {
   const actions = document.createElement('div');
   actions.textContent = 'Actions';
   let attackBtn = document.createElement('button');
   attackBtn.textContent = 'Attack';
-  if (player.items.length > 0) createItemActions(actions, monster);
-  attackBtn.disabled = false;
   // Add code here to reset the player attack timeout to allow the player to attack a monster as soon as one is encountered
   attackBtn.addEventListener('click', () => {
+    player.attack(monster);
     if (monster.hp <= 0) {
       defeatMonster(monster);
-      updateActionCam();
     } else {
       attackBtn.disabled = true;
-      player.attack(monster);
       setTimeout(() => (attackBtn.disabled = false), player.attackSpeed);
       // Replace the hp printed to be the monster's hp
       document.getElementById('Monster-hp').textContent = `HP: ${monster.hp}`;
@@ -313,13 +311,14 @@ function createMonsterMenu(root, monster) {
   });
   actions.appendChild(attackBtn);
   root.appendChild(actions);
+  if (player.items.length > 0) createItemActions(actions, monster);
 }
 
 // UPDATE
 // update the forEach call to be on the player's items instead of an empty array
 // update the function passed to forEach to return immediately if the item is a Key (the key is not a valid item in a battle)
 // update the itemBtn event listener to call useItem on the player for potions, useItem on the monster for Bombs.
-// Add a call to defeatMonster if its hp is 0 or lower
+// Modify the if condition in the listener to call defeatMonster if the monster's hp is 0 or lower.
 function createItemActions(root, monster) {
   const items = document.createElement('div');
   items.textContent = 'Items';
@@ -332,7 +331,11 @@ function createItemActions(root, monster) {
       if (item instanceof Bomb) player.useItem(item, monster);
       if (item instanceof Potion) player.useItem(item, player);
       if (monster.hp <= 0) defeatMonster(monster);
-      updateActionCam();
+      else {
+        items.removeChild(itemBtn);
+        document.getElementById('Player-hp').textContent = `HP: ${player.hp}`;
+        document.getElementById('Monster-hp').textContent = `HP: ${monster.hp}`;
+      }
     });
     items.appendChild(itemBtn);
   });
