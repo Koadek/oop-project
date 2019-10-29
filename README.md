@@ -39,11 +39,3 @@ Extra features
 
 - Player can use items in battle
 - Game has all the sounds
-- Surprise me?
-
-## Instructions
-
-Implement the classes by going over each js file and reading the comments.
-Implement the game logic by going over the main.js file and reading the comments.
-
-You do not need to update **index.html**, **style.css** or **data.js** (although you can play around with MAX_MONSTERS)
